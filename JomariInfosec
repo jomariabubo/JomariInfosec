@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login with reCAPTCHA V2</title>
+    <!-- Load the reCAPTCHA API script asynchronously -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<style>
+    /* Set the background color for the entire body */
+    body {
+        background-color: lightblue;
+    }
+    /* Style the login form */
+    form {
+        background-color: white; /* White background for form */
+        width: 25%; /* Set form width to 25% of the viewport */
+        margin: 120px auto; /* Center the form vertically and horizontally */
+        padding: 50px; /* Add padding inside the form */
+        box-shadow: 10px 10px 5px rgb(105, 15, 190); /* Add shadow effect */
+        border-radius: 50px; /* Round the corners of the form */
+    }
+</style>
+<body>
+    <!-- Login form structure -->
+    <form id="userLoginForm">
+        <h1>Login Form</h1> <!-- Title of the form -->
+        <input id="userInput" type="text" name="username" placeholder="Username" required><br><br> <!-- Username input -->
+        <input id="passInput" type="password" name="password" placeholder="Password" required><br><br> <!-- Password input -->
+        <button type="submit">Login</button> <!-- Submit button -->
+        <!-- reCAPTCHA widget -->
+        <div class="g-recaptcha" data-sitekey="6Ldsv0oqAAAAALiaJUmeI3JML_G-vFLXAWbqrXLG"></div>
+    </form>
+
+    <script>
+        // Store valid usernames and passwords (for demo purposes)
+        var validUsers = {
+            "johnDoe": "john123",
+            "janeDoe": "jane456",
+            "Jomari": "yourPasswordHere", 
+        };
+
+        // Add an event listener to handle form submission
+        document.getElementById('userLoginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            
+            // Retrieve values from input fields
+            var username = document.getElementById('userInput').value.trim(); // Get username value
+            var password = document.getElementById('passInput').value.trim(); // Get password value
+            
+           
+            var captchaResponse = grecaptcha.getResponse();
+            
+            // Validate if reCAPTCHA is completed
+            if (!captchaResponse) {
+                alert('Please complete reCAPTCHA!'); // Alert user to complete reCAPTCHA
+                return; // Exit function if not completed
+            }
+
+            // Validate if the username exists and the password matches
+            if (validUsers[username] && validUsers[username] === password) {
+                alert('Login successful'); // Notify user of successful login
+                window.location.href = "admin.php"; // Redirect to admin page
+            } else {
+                alert("Invalid username or password"); // Notify user of invalid credentials
+            }
+
+            console.log('Form submitted', { username, password, captchaResponse }); // Log submitted data for debugging
+        });
+    </script>
+</body>
+</html>
